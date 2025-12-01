@@ -1,0 +1,211 @@
+{
+  "name": "My workflow 2",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "triggerAtHour": 10
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -336,
+        -96
+      ],
+      "id": "1b39c75b-3733-4380-bc2d-60185b56e0c1",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "url": "https://api.hh.ru/vacancies",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "text",
+              "value": "data scientist"
+            },
+            {
+              "name": "area",
+              "value": "1"
+            },
+            {
+              "name": "per_page",
+              "value": "10"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "n8n-job-analyzer"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -128,
+        -96
+      ],
+      "id": "caa8e117-ebc9-4637-b6c6-f408ab200f3b",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Ты аналитик рынка труда.\n\nУ тебя есть список вакансий с hh.ru по одному направлению. Ниже приведены описания вакансий, каждая вакансия отделена пустой строкой.\n\nВакансии:\n{{ $json[\"vacancies_text\"] }}\n\nТвоя задача:\n1. Выдели из описаний вакансий навыки и требования (технологии, языки, фреймворки, soft skills).\n2. Нормализуй названия навыков: похожие варианты объединяй (python/питон -> Python, postgres/PostgreSQL -> PostgreSQL).\n3. Подсчитай, сколько раз каждый навык встречается во всех вакансиях.\n4. Отсортируй навыки по убыванию частоты и выбери топ-15.\n\nСформируй ответ строго в таком формате (на русском):\n\n\"На этой неделе я спарсил {{ $json[\"vacancies_count\"] }} свежих вакансий по выбранному направлению. Самыми популярными являются следующие требования:\n\n- навык 1: N раз\n- навык 2: M раз\n- ...\"\n\nНикакого лишнего текста, только этот дайджест.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        320,
+        -96
+      ],
+      "id": "4babdb26-e3b6-422a-9247-e22d13f3ab5a",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Берём тело ответа с hh.ru\nconst res = items[0].json;\nconst vacancies = res.items || [];\n\n// Собираем удобный текст для модели\nconst text = vacancies.map((v, idx) => {\n  const name = v.name || \"\";\n  const req = v.snippet?.requirement || \"\";\n  const resp = v.snippet?.responsibility || \"\";\n  return `Вакансия ${idx + 1}. ${name}.\nТребования: ${req}\nОбязанности: ${resp}`;\n}).join(\"\\n\\n\");\n\nreturn [\n  {\n    json: {\n      vacancies_text: text,\n      vacancies_count: vacancies.length\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        80,
+        -96
+      ],
+      "id": "63cf4ec9-4dba-4176-bc23-beb20c2b76c2",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "GigaChat/GigaChat-2-Max",
+          "mode": "list",
+          "cachedResultName": "GigaChat/GigaChat-2-Max"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        320,
+        128
+      ],
+      "id": "48da7650-4098-4cda-b7a6-ecdc52a73a09",
+      "name": "OpenAI Chat Model3",
+      "credentials": {
+        "openAiApi": {
+          "id": "NUJ4oNInTG7PNw0V",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "-1003356586906",
+        "text": "={{ $json[\"output\"] }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        880,
+        -96
+      ],
+      "id": "a7fa58bb-8fc5-4d1d-918b-63d86b4bd09c",
+      "name": "Send a text message",
+      "webhookId": "f55cb0f2-0e9f-4cb2-88b9-ea6a4d7b58cb",
+      "credentials": {
+        "telegramApi": {
+          "id": "oJPbdmTM0V3lk7ol",
+          "name": "Бот парсер с постами"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "e0eaf571-ff3c-4fe9-b820-edb0e056cf13",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "9f37e81d44cd2e32d4f741da70e9e50f43749245b836e124a97237ac2739446d"
+  },
+  "id": "QqlXoXCDKCKoMoT6",
+  "tags": []
+}
