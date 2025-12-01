@@ -1,0 +1,952 @@
+{
+  "name": "Персональный",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1712,
+        304
+      ],
+      "id": "39ef477a-1ca6-4bfb-9298-76cb7b291866",
+      "name": "Telegram Trigger",
+      "webhookId": "15b91e02-f5ce-49a0-aa13-6f7f2d1d36fc",
+      "credentials": {
+        "telegramApi": {
+          "id": "mvJS0yILhAdELg1p",
+          "name": "Персональный ментор"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "fddeb872-0698-4dd7-9b9a-c73596c6f671",
+                    "leftValue": "={{ $json.status }}",
+                    "rightValue": "idle",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "29a675f3-56c5-4cbe-918d-98326617a816",
+                    "leftValue": "={{ $json.status }}",
+                    "rightValue": "awaiting_goal",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "40b92444-62ec-40b1-89dd-0259de5b363f",
+                    "leftValue": "={{ $json.status }}",
+                    "rightValue": "awaiting_confirmation",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "19701f75-1b06-4c94-a973-3fba2acfc4bf",
+                    "leftValue": "={{ $json.status }}",
+                    "rightValue": "learning",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        -1040,
+        560
+      ],
+      "id": "21a8af3b-eb69-4ed5-ac7c-7926be19767d",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\n\nconst input = $input.first().json;  \nconst chatId = input.message.chat.id;\nconst text   = input.message.text;\n\nif (!data.users) {\n  data.users = {};\n}\n\nif (!data.users[chatId]) {\n  data.users[chatId] = {\n    status: 'idle',\n    plan: null,\n    cursor: 0,\n  };\n}\n\nconst state = data.users[chatId];\n\ndata.lastChatId = chatId;\n\nreturn [\n  {\n    json: {\n      status: state.status,\n      cursor: state.cursor,\n      plan:   state.plan,\n\n      chatId,\n      text,\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1488,
+        304
+      ],
+      "id": "5e9de560-4bb3-45bc-9b69-e457e60fc800",
+      "name": "Main logic"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "5d1282db-3531-40d3-ab23-f1f409b6e94b",
+              "leftValue": "={{ $json.text || '' }}",
+              "rightValue": "/start",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -752,
+        32
+      ],
+      "id": "7c87f0b2-47cc-4436-bb4b-d8fa4e7aa4fc",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\nconst input = $input.first().json;\nconst chatId = input.chatId;\n\nif (!chatId) {\n  return [{\n    json: {\n      debug: 'NO_CHAT_ID_IN_SET_AWAITING_GOAL',\n      input,\n      users: data.users || null,\n      lastChatId: data.lastChatId || null,\n    }\n  }];\n}\n\nif (!data.users) {\n  data.users = {};\n}\n\nif (!data.users[chatId]) {\n  data.users[chatId] = {\n    status: 'idle',\n    plan: null,\n    cursor: 0,\n  };\n}\n\nconst state = data.users[chatId];\n\nstate.status = 'awaiting_goal';\n\ndata.lastChatId = chatId;\n\nreturn [{\n  json: {\n    chatId,\n    input,\n    stateAfter: state,\n    users: data.users,\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -464,
+        16
+      ],
+      "id": "262f178e-f52f-4970-9047-de83be1a171c",
+      "name": "set awaiting_goal"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\nconst input = $input.first().json;\n\nconst raw = input.output;\n\nif (!raw) {\n  throw new Error('В ответе от AI нет поля \"output\" с планом');\n}\n\nlet plan;\ntry {\n  plan = JSON.parse(raw);\n} catch (e) {\n  throw new Error('Не удалось распарсить JSON из output: ' + raw);\n}\n\nif (!plan.topics) {\n  throw new Error('План от AI не содержит поле topics: ' + JSON.stringify(plan));\n}\n\nconst topics = plan.topics;\n\nconst flatConcepts = [];\nfor (const topic of topics) {\n  for (const concept of topic.concepts) {\n    flatConcepts.push({\n      topic: topic.name,\n      concept,\n    });\n  }\n}\n\nconst chatId =\n  input.chatId ??\n  input.message?.chat?.id ??\n  data.lastChatId;\n\nif (!chatId) {\n  throw new Error('Не могу сохранить план: нет chatId');\n}\n\nif (!data.users) {\n  data.users = {};\n}\n\nif (!data.users[chatId]) {\n  data.users[chatId] = {\n    status: 'idle',\n    plan: null,\n    cursor: 0,\n  };\n}\n\nconst state = data.users[chatId];\n\nstate.plan = { topics, flatConcepts };\nstate.cursor = 0;\nstate.status = 'awaiting_confirmation';\n\ndata.lastChatId = chatId;\n\nreturn [\n  {\n    json: {\n      chatId,\n      topics,\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -464,
+        400
+      ],
+      "id": "c59cdef2-00fb-4343-b848-06d0197958ba",
+      "name": "save study plan"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chatId }}",
+        "text": "=Вот учебный план, который я для тебя подготовил:\n\n{{ $json.topics.map((t, i) => (i+1) + '. ' + t.name).join('\\n') }}\n\nЕсли всё ок — напиши «Поехали», и я начну присылать посты по понятиям.",
+        "replyMarkup": "replyKeyboard",
+        "replyKeyboardOptions": {},
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -240,
+        400
+      ],
+      "id": "e7426d4c-d4f2-4144-abbd-8838d10adf8a",
+      "name": "Send plan",
+      "webhookId": "ad5f7ff0-e1ef-44d1-9ae1-b97527697be3",
+      "credentials": {
+        "telegramApi": {
+          "id": "mvJS0yILhAdELg1p",
+          "name": "Персональный ментор"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "2b553e54-329d-4f31-80fb-76ac7aa8314c",
+              "leftValue": "={{ ($json.text || '').toLowerCase().includes('поехали') }}",
+              "rightValue": "Поехали",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -752,
+        784
+      ],
+      "id": "04bbae70-af89-448d-8a65-f424d7d99f4f",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\nconst input = $input.first().json;\n\nconst chatId =\n  input.chatId ??\n  input.message?.chat?.id ??\n  data.lastChatId;\n\nif (!chatId) {\n  throw new Error('Не могу установить learning: нет chatId');\n}\n\nif (!data.users) {\n  data.users = {};\n}\n\nif (!data.users[chatId]) {\n  data.users[chatId] = {\n    status: 'idle',\n    plan: null,\n    cursor: 0,\n  };\n}\n\nconst state = data.users[chatId];\n\nstate.status = 'learning';\n\ndata.lastChatId = chatId;\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -464,
+        644
+      ],
+      "id": "b2aa3a9a-4696-4f1f-8ae2-3e3f8d781817",
+      "name": "Set learning"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\nconst input = $input.first().json;\n\nconst chatId =\n  input.chatId ??\n  input.message?.chat?.id ??\n  data.lastChatId;\n\nif (!chatId) {\n  throw new Error('Нет chatId для получения следующего понятия');\n}\n\nif (!data.users) {\n  data.users = {};\n}\n\nif (!data.users[chatId]) {\n  data.users[chatId] = {\n    status: 'idle',\n    plan: null,\n    cursor: 0,\n  };\n}\n\nconst state = data.users[chatId];\n\nconst plan = state.plan;\nconst flat = plan?.flatConcepts || [];\nconst cursor = state.cursor ?? 0;\n\nif (!plan || flat.length === 0) {\n  return [\n    {\n      json: {\n        done: true,\n        reason: 'noPlan',\n        chatId,\n      }\n    }\n  ];\n}\n\nconst total = flat.length;\n\nif (cursor >= total) {\n  return [\n    {\n      json: {\n        done: true,\n        reason: 'finished',\n        chatId,\n      }\n    }\n  ];\n}\n\nconst current = flat[cursor];\n\nreturn [\n  {\n    json: {\n      done: false,\n      chatId,\n      topic: current.topic,\n      concept: current.concept,\n      index: cursor + 1,\n      total,\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -240,
+        924
+      ],
+      "id": "4bd7e0fe-6714-4f9a-9b53-da66ff310dfa",
+      "name": "Get next"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "d9a8c00b-f1fe-46f3-8362-52a1f5d822bf",
+              "leftValue": "={{ $json.done === true }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -16,
+        924
+      ],
+      "id": "a65c45ad-eedd-43ae-a352-64b3ac282d94",
+      "name": "If done"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chatId }}",
+        "text": "Ты прошёл все запланированные темы 🎓 Если хочешь — напиши новую цель, и я составлю следующий учебный план.",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        272,
+        664
+      ],
+      "id": "55c85be4-06b4-43e8-b96e-f2906ff308d2",
+      "name": "Send a text finish",
+      "webhookId": "5a9d7982-5af8-42fd-9201-8d6b04642646",
+      "credentials": {
+        "telegramApi": {
+          "id": "mvJS0yILhAdELg1p",
+          "name": "Персональный ментор"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\nconst input = $input.first().json;\n\nconst chatId =\n  input.chatId ??\n  input.message?.chat?.id ??\n  data.lastChatId;\n\nif (!chatId) {\n  throw new Error('Не могу сбросить состояние: нет chatId');\n}\n\nif (!data.users) {\n  data.users = {};\n}\n\ndata.users[chatId] = {\n  status: 'idle',\n  plan: null,\n  cursor: 0,\n};\n\ndata.lastChatId = chatId;\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        560,
+        664
+      ],
+      "id": "e927272c-2390-4071-a3ad-c93e21e4863b",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Тема: {{ $node[\"Get next\"].json.topic }}\nПонятие: {{ $node[\"Get next\"].json.concept }}\n\nСоставь небольшой обучающий пост по этому понятию.\nОбъясняй просто и по шагам.\nТы — персональный ментор.\n\nС помощью инструмента tavily_search найди 2–3 релевантных источника по этому понятию и на их основе подготовь небольшой обучающий пост.\n\nСтруктура ответа:\n- Краткое определение (1–2 предложения)\n- Основная идея / как это работает (3–5 предложений)\n- Небольшой пример или практический совет (1–2 предложения)\n\nПиши на русском, приводи примеры из интернета с ссылками, чтобы было максимально полезно.\nДавай ответ не более 3500 символов.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        208,
+        960
+      ],
+      "id": "3308078c-8e41-420b-816f-f43900253760",
+      "name": "Create post"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Ты — персональный ментор по программированию и ИТ.\n\nПользователь описывает, чему он хочет научиться и каков его уровень.\nНа основе этого тебе нужно составить СТРУКТУРИРОВАННЫЙ учебный план.\n\nФормат ответа — строго JSON (никакого текста вокруг!):\n\n{\n  \"topics\": [\n    {\n      \"name\": \"Название темы 1\",\n      \"concepts\": [\"понятие 1\", \"понятие 2\", \"понятие 3\"]\n    },\n    {\n      \"name\": \"Название темы 2\",\n      \"concepts\": [\"понятие 1\", \"понятие 2\"]\n    }\n  ]\n}\n\nКаждый элемент \"topics\" — это тема.\nВ \"concepts\" перечисли основные понятия / подтемы, которые надо изучить по этой теме.\nПиши всё на русском.\nДай три темы по два понятия.\nНикаких комментариев и объяснений вне JSON.\nВот что описал тебе пользователь: {{ $json.text }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        -816,
+        296
+      ],
+      "id": "9c82af49-f9ce-4fac-8bfa-284ed88b8a4b",
+      "name": "Generate plan"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\nconst input = $input.first().json;\n\nconst chatId =\n  input.chatId ??\n  input.message?.chat?.id ??\n  data.lastChatId;\n\nif (!chatId) {\n  throw new Error('Не могу сдвинуть курсор: нет chatId');\n}\n\nif (!data.users) {\n  data.users = {};\n}\n\nif (!data.users[chatId]) {\n  data.users[chatId] = {\n    status: 'idle',\n    plan: null,\n    cursor: 0,\n  };\n}\n\nconst state = data.users[chatId];\n\nstate.cursor = (state.cursor ?? 0) + 1;\n\ndata.lastChatId = chatId;\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        784,
+        960
+      ],
+      "id": "a783001a-7631-4ddc-8711-ffd4bf251ef5",
+      "name": "Code cursor ++"
+    },
+    {
+      "parameters": {
+        "query": "={{ $node[\"Get next\"].json.topic + \" \" + $node[\"Get next\"].json.concept }}",
+        "options": {}
+      },
+      "type": "@tavily/n8n-nodes-tavily.tavilyTool",
+      "typeVersion": 1,
+      "position": [
+        344,
+        1184
+      ],
+      "id": "9ffe8fe8-fc5f-4630-89a4-1b2818b2d370",
+      "name": "Search in Tavily",
+      "credentials": {
+        "tavilyApi": {
+          "id": "JoI8LYNIq0i05Dn1",
+          "name": "Tavily account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "a9659be1-6f06-4684-b522-ef7000bf5586",
+              "leftValue": "={{ ($json.text || '').toLowerCase().trim() }}",
+              "rightValue": "/reset",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1264,
+        304
+      ],
+      "id": "863f0d4e-e964-41c2-b787-e3993163ba67",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\nconst input = $input.first().json;\n\nconst chatId =\n  input.chatId ??\n  input.message?.chat?.id ??\n  data.lastChatId;\n\nif (!chatId) {\n  throw new Error('Не могу сбросить состояние: нет chatId');\n}\n\nif (!data.users) {\n  data.users = {};\n}\n\ndata.users[chatId] = {\n  status: 'idle',\n  plan: null,\n  cursor: 0,\n};\n\ndata.lastChatId = chatId;\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1040,
+        -176
+      ],
+      "id": "bf4e16f9-856b-46b1-936e-e238725315eb",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $node[\"Get next\"].json.chatId }}",
+        "text": "=Тема: {{ $node[\"Get next\"].json.topic }}\nПонятие: {{ $node[\"Get next\"].json.concept }}\n\n\n{{ $node[\"Create post\"].json.output }}\nЕсли готов перейти к следующей теме, напиши /next 😘\nЕсли хочешь сбросить обучение, нажми /reset 😢",
+        "replyMarkup": "replyKeyboard",
+        "replyKeyboard": {
+          "rows": [
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "/reset",
+                    "additionalFields": {}
+                  },
+                  {
+                    "text": "/next",
+                    "additionalFields": {}
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "replyKeyboardOptions": {},
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        560,
+        960
+      ],
+      "id": "b7b2c736-1383-4667-a400-5512b244e654",
+      "name": "Send a plan",
+      "webhookId": "c0041313-dc0e-4249-95fe-7d535ad043bd",
+      "credentials": {
+        "telegramApi": {
+          "id": "mvJS0yILhAdELg1p",
+          "name": "Персональный ментор"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chatId }}",
+        "text": "Если план тебя устраивает — напиши \"Поехали\", и я начну присылать посты по понятиям 🙂",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -464,
+        836
+      ],
+      "id": "ea754191-a408-444d-b1ba-5646790c8993",
+      "name": "Send \"Поехали\"",
+      "webhookId": "e1444991-458c-4379-8301-96b9760eb477",
+      "credentials": {
+        "telegramApi": {
+          "id": "mvJS0yILhAdELg1p",
+          "name": "Персональный ментор"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chatId }}",
+        "text": "=Обучение сброшено ✅\nНапиши /start, чтобы начать заново.",
+        "replyMarkup": "replyKeyboard",
+        "replyKeyboard": {
+          "rows": [
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "/start",
+                    "additionalFields": {}
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "replyKeyboardOptions": {},
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -752,
+        -176
+      ],
+      "id": "e3ee12b3-ab05-47dc-8e3f-7ce917bef3ea",
+      "name": "Send /start после /reset",
+      "webhookId": "2d3fd9ec-183b-455c-9c71-d965dfdb1f86",
+      "credentials": {
+        "telegramApi": {
+          "id": "mvJS0yILhAdELg1p",
+          "name": "Персональный ментор"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chatId }}",
+        "text": "Привет! Я твой персональный ментор 😊 Чему бы ты хотел научиться (проект, подготовка к собесу или работе)? И какой у тебя уровень (начальный / средний / продвинутый)? Напиши всё одним сообщением.",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -464,
+        -176
+      ],
+      "id": "895ebff4-f1e4-4cb8-9338-2595945b0ac1",
+      "name": "Send hello",
+      "webhookId": "5632b366-78f9-44b9-b9a1-e3441ee2c520",
+      "credentials": {
+        "telegramApi": {
+          "id": "mvJS0yILhAdELg1p",
+          "name": "Персональный ментор"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $node[\"Telegram Trigger\"].json[\"message\"][\"chat\"][\"id\"] }}",
+        "text": "Напиши /start, чтобы начать работу",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -464,
+        208
+      ],
+      "id": "2a43397c-0bb4-4fb1-be96-453179d4cefb",
+      "name": "Send /start",
+      "webhookId": "3b8445b3-8b3e-4d59-9185-a58e0f2aa2a5",
+      "credentials": {
+        "telegramApi": {
+          "id": "mvJS0yILhAdELg1p",
+          "name": "Персональный ментор"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "GigaChat/GigaChat-2-Max",
+          "mode": "list",
+          "cachedResultName": "GigaChat/GigaChat-2-Max"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -816,
+        528
+      ],
+      "id": "7f08a338-1a00-4305-a417-80e8ff473810",
+      "name": "GigaChat-2",
+      "credentials": {
+        "openAiApi": {
+          "id": "NUJ4oNInTG7PNw0V",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "GigaChat/GigaChat-2-Max",
+          "mode": "list",
+          "cachedResultName": "GigaChat/GigaChat-2-Max"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        216,
+        1184
+      ],
+      "id": "b15b6796-18ea-46dc-82b2-c504f6365de4",
+      "name": "GigaChat-2.1",
+      "credentials": {
+        "openAiApi": {
+          "id": "NUJ4oNInTG7PNw0V",
+          "name": "OpenAi account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Main logic",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Main logic": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Generate plan",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get next",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Send hello",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "set awaiting_goal",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send /start",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "save study plan": {
+      "main": [
+        [
+          {
+            "node": "Send plan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Set learning",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send \"Поехали\"",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set learning": {
+      "main": [
+        [
+          {
+            "node": "Get next",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get next": {
+      "main": [
+        [
+          {
+            "node": "If done",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If done": {
+      "main": [
+        [
+          {
+            "node": "Send a text finish",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text finish": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate plan": {
+      "main": [
+        [
+          {
+            "node": "save study plan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create post": {
+      "main": [
+        [
+          {
+            "node": "Send a plan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search in Tavily": {
+      "ai_tool": [
+        [
+          {
+            "node": "Create post",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Send /start после /reset",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a plan": {
+      "main": [
+        [
+          {
+            "node": "Code cursor ++",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send hello": {
+      "main": [
+        []
+      ]
+    },
+    "GigaChat-2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Generate plan",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GigaChat-2.1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Create post",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "54772942-1ce6-4ccc-b60e-1367fc8ad718",
+  "meta": {
+    "instanceId": "9f37e81d44cd2e32d4f741da70e9e50f43749245b836e124a97237ac2739446d"
+  },
+  "id": "nEfPt1x8wkBC9Ga0",
+  "tags": []
+}
