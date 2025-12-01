@@ -1,4 +1,4 @@
-# Запуск n8n в Cloud.ru (Container Apps + Object Storage)
+# ✈️ Запуск n8n в Cloud.ru (Container Apps + Object Storage)
 
 Этот репозиторий описывает, как развернуть **n8n** в облаке **Cloud.ru**  
 с использованием сервисов **Container Apps** и **Object Storage**.
