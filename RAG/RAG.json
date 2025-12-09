@@ -1,0 +1,1046 @@
+{
+  "name": "Storage Vector Store",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "https://s3.cloud.ru/rag-vacansies/developer.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=fd701e77-dbbc-4fba-ac28-f4cfe24c70f6%3A3d754dbaa62e6b4c7802a1b23a3aaa6a%2F20251206%2Fru-central-1%2Fs3%2Faws4_request&X-Amz-Date=20251206T164042Z&X-Amz-Expires=604800&X-Amz-Signature=ce44c23e43ea7178fcc31455a11e2201f31c97ae9a120718c475a9149b8f9ed8&X-Amz-SignedHeaders=host&response-content-disposition=attachment&x-id=GetObject",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        192,
+        -560
+      ],
+      "id": "001c3769-b29a-4810-b6e9-ae3db782de12",
+      "name": "developer.pdf"
+    },
+    {
+      "parameters": {
+        "url": "https://s3.cloud.ru/rag-vacansies/analyst.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=fd701e77-dbbc-4fba-ac28-f4cfe24c70f6%3A3d754dbaa62e6b4c7802a1b23a3aaa6a%2F20251206%2Fru-central-1%2Fs3%2Faws4_request&X-Amz-Date=20251206T164113Z&X-Amz-Expires=604800&X-Amz-Signature=a61b39e7f84c1d724692c6228322ff0c00d6841c4453565c747268f395d1ad9a&X-Amz-SignedHeaders=host&response-content-disposition=attachment&x-id=GetObject",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        208,
+        -208
+      ],
+      "id": "7b5bf7d3-4928-4d6a-a783-4976991bb7b0",
+      "name": "analyst.pdf"
+    },
+    {
+      "parameters": {
+        "url": "https://s3.cloud.ru/rag-vacansies/DevOps.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=fd701e77-dbbc-4fba-ac28-f4cfe24c70f6%3A3d754dbaa62e6b4c7802a1b23a3aaa6a%2F20251206%2Fru-central-1%2Fs3%2Faws4_request&X-Amz-Date=20251206T164129Z&X-Amz-Expires=604800&X-Amz-Signature=7f232fd224a04b25211d45220368dcdadef164258f1c10eca90f63aac6fa6c99&X-Amz-SignedHeaders=host&response-content-disposition=attachment&x-id=GetObject",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        208,
+        112
+      ],
+      "id": "1eaf7ed1-1374-4d21-9d86-c72441a554f1",
+      "name": "DevOps.pdf"
+    },
+    {
+      "parameters": {
+        "url": "https://s3.cloud.ru/rag-vacansies/data_science.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=fd701e77-dbbc-4fba-ac28-f4cfe24c70f6%3A3d754dbaa62e6b4c7802a1b23a3aaa6a%2F20251206%2Fru-central-1%2Fs3%2Faws4_request&X-Amz-Date=20251206T164149Z&X-Amz-Expires=604800&X-Amz-Signature=d7fb4c1b3a4800141ef59b5053369ce8373bedf89dd1fab167684aafa5c611dc&X-Amz-SignedHeaders=host&response-content-disposition=attachment&x-id=GetObject",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        192,
+        528
+      ],
+      "id": "d0295cae-d454-4e12-8e2b-400bb66ff208",
+      "name": "data_science.pdf"
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        416,
+        -560
+      ],
+      "id": "5b375d03-4f78-48ab-aa54-e0ff923b58db",
+      "name": "Extract from developer.pdf"
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        416,
+        -208
+      ],
+      "id": "f3d35583-10e1-43ed-8fd7-2d8e89b2f000",
+      "name": "Extract from analyst.pdf"
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        416,
+        112
+      ],
+      "id": "36c31b9d-2ca9-4022-a385-6a7f6a26cb85",
+      "name": "Extract from DevOps.pdf"
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        416,
+        528
+      ],
+      "id": "8fe84d84-c45f-480b-8327-0f5aa14ddc2b",
+      "name": "Extract from data_science.pdf"
+    },
+    {
+      "parameters": {
+        "modelName": "ai-forever/ru-en-RoSBERTa",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsHuggingFaceInference",
+      "typeVersion": 1,
+      "position": [
+        624,
+        -352
+      ],
+      "id": "b8116306-9a55-47a1-ae38-27b02123a33d",
+      "name": "Embeddings HuggingFace Inference",
+      "credentials": {
+        "huggingFaceApi": {
+          "id": "alF5MT1hUBNdClY9",
+          "name": "HuggingFaceApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "ai-forever/ru-en-RoSBERTa",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsHuggingFaceInference",
+      "typeVersion": 1,
+      "position": [
+        624,
+        0
+      ],
+      "id": "8f78be5e-474d-4ea7-a9bc-e43212097000",
+      "name": "Embeddings HuggingFace Inference1",
+      "credentials": {
+        "huggingFaceApi": {
+          "id": "alF5MT1hUBNdClY9",
+          "name": "HuggingFaceApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "memoryKey": {
+          "__rl": true,
+          "mode": "list",
+          "value": "vector_store_key"
+        },
+        "clearStore": true
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreInMemory",
+      "typeVersion": 1.3,
+      "position": [
+        624,
+        144
+      ],
+      "id": "bf8d0a82-be30-4c7a-a33c-62829e434fd4",
+      "name": "Simple Vector Store2"
+    },
+    {
+      "parameters": {
+        "modelName": "ai-forever/ru-en-RoSBERTa",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsHuggingFaceInference",
+      "typeVersion": 1,
+      "position": [
+        624,
+        384
+      ],
+      "id": "5edb5b6c-d4df-4b53-97ff-f01db79df0a6",
+      "name": "Embeddings HuggingFace Inference2",
+      "credentials": {
+        "huggingFaceApi": {
+          "id": "alF5MT1hUBNdClY9",
+          "name": "HuggingFaceApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "memoryKey": {
+          "__rl": true,
+          "mode": "list",
+          "value": "vector_store_key"
+        },
+        "clearStore": true
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreInMemory",
+      "typeVersion": 1.3,
+      "position": [
+        624,
+        544
+      ],
+      "id": "7dc754d9-43f7-4fa2-b416-158f095bcc6c",
+      "name": "Simple Vector Store3"
+    },
+    {
+      "parameters": {
+        "modelName": "ai-forever/ru-en-RoSBERTa",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsHuggingFaceInference",
+      "typeVersion": 1,
+      "position": [
+        624,
+        752
+      ],
+      "id": "c7f4bbc8-08fa-444c-bf47-6afdeaca83d9",
+      "name": "Embeddings HuggingFace Inference3",
+      "credentials": {
+        "huggingFaceApi": {
+          "id": "alF5MT1hUBNdClY9",
+          "name": "HuggingFaceApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        400,
+        976
+      ],
+      "id": "fe296457-0f3a-4401-aac3-7e3354936508",
+      "name": "Extract from resume.pdf"
+    },
+    {
+      "parameters": {
+        "url": "https://s3.cloud.ru/rag-profile/resume.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=fd701e77-dbbc-4fba-ac28-f4cfe24c70f6%3A3d754dbaa62e6b4c7802a1b23a3aaa6a%2F20251206%2Fru-central-1%2Fs3%2Faws4_request&X-Amz-Date=20251206T194220Z&X-Amz-Expires=604800&X-Amz-Signature=1f0e94ea7e4631ea9024df0b7ef45a5944f69345adad4dcadee2af5f7a25f128&X-Amz-SignedHeaders=host&response-content-disposition=attachment&x-id=GetObject",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        192,
+        976
+      ],
+      "id": "fed343f5-eca7-453f-bcb5-fe5a5fad9060",
+      "name": "resume.pdf"
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "memoryKey": {
+          "__rl": true,
+          "mode": "list",
+          "value": "self_store_key"
+        },
+        "clearStore": true
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreInMemory",
+      "typeVersion": 1.3,
+      "position": [
+        624,
+        976
+      ],
+      "id": "f8d9c31c-5220-41d7-9cdf-a05ca49b2c15",
+      "name": "Simple Vector Store4"
+    },
+    {
+      "parameters": {
+        "modelName": "ai-forever/ru-en-RoSBERTa",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsHuggingFaceInference",
+      "typeVersion": 1,
+      "position": [
+        624,
+        1216
+      ],
+      "id": "644ab75e-67ba-4aa4-b4a7-557a1c2cfa12",
+      "name": "Embeddings HuggingFace Inference4",
+      "credentials": {
+        "huggingFaceApi": {
+          "id": "alF5MT1hUBNdClY9",
+          "name": "HuggingFaceApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://s3.cloud.ru/rag-profile/test_results.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=fd701e77-dbbc-4fba-ac28-f4cfe24c70f6%3A3d754dbaa62e6b4c7802a1b23a3aaa6a%2F20251206%2Fru-central-1%2Fs3%2Faws4_request&X-Amz-Date=20251206T194446Z&X-Amz-Expires=604800&X-Amz-Signature=44c34b9782611b3d465b33eb2cd190e1fdb5ae451c440f6ddadd3e52f0786f56&X-Amz-SignedHeaders=host&response-content-disposition=attachment&x-id=GetObject",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        192,
+        1440
+      ],
+      "id": "8c68d82c-1036-417c-ad4a-865fed56bd62",
+      "name": "test_results.pdf"
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        400,
+        1440
+      ],
+      "id": "b3594957-6a07-4ed4-85a9-0e1220db6248",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "memoryKey": {
+          "__rl": true,
+          "mode": "list",
+          "value": "self_store_key"
+        },
+        "clearStore": true
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreInMemory",
+      "typeVersion": 1.3,
+      "position": [
+        624,
+        1440
+      ],
+      "id": "20bafae9-3453-45ab-afe8-08d6ca2a8c34",
+      "name": "Simple Vector Store5"
+    },
+    {
+      "parameters": {
+        "modelName": "ai-forever/ru-en-RoSBERTa",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsHuggingFaceInference",
+      "typeVersion": 1,
+      "position": [
+        624,
+        1728
+      ],
+      "id": "ed2cec8f-4938-417b-a41b-0799989ebc2f",
+      "name": "Embeddings HuggingFace Inference5",
+      "credentials": {
+        "huggingFaceApi": {
+          "id": "alF5MT1hUBNdClY9",
+          "name": "HuggingFaceApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "memoryKey": {
+          "__rl": true,
+          "mode": "list",
+          "value": "vector_store_key"
+        },
+        "clearStore": true
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreInMemory",
+      "typeVersion": 1.3,
+      "position": [
+        672,
+        -560
+      ],
+      "id": "a69a6b02-ee8b-4be3-9ee9-db16e06c9ea7",
+      "name": "Simple Vector Store 1"
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "memoryKey": {
+          "__rl": true,
+          "mode": "list",
+          "value": "vector_store_key"
+        },
+        "clearStore": true
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreInMemory",
+      "typeVersion": 1.3,
+      "position": [
+        624,
+        -208
+      ],
+      "id": "b720da63-3dbe-4dfe-bacb-cb0492e837f6",
+      "name": "Simple Vector Store"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        752,
+        -352
+      ],
+      "id": "1bad8f31-2bc7-46b4-bf83-4da5ee6535be",
+      "name": "developer.pdf1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        768,
+        0
+      ],
+      "id": "ee0fbdc0-3d80-4525-841b-a07d375a2de0",
+      "name": "analyst.pdf1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        752,
+        384
+      ],
+      "id": "033215a7-2698-4617-ae93-93d053067b7f",
+      "name": "DevOps.pdf1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        752,
+        752
+      ],
+      "id": "fa67e576-dafd-4fea-8832-9d4295112f77",
+      "name": "data_science.pdf1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        768,
+        1232
+      ],
+      "id": "a68e8888-a97a-4120-a204-04f326d61947",
+      "name": "resume.pdf1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        784,
+        1728
+      ],
+      "id": "73fe7253-400a-40fd-9ed1-126905f568d4",
+      "name": "test_results.pdf1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        528
+      ],
+      "id": "a6b467de-dc1f-4434-9de9-c0ae72969838",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "mode": "load",
+        "memoryKey": {
+          "__rl": true,
+          "value": "self_store_key",
+          "mode": "list",
+          "cachedResultName": "self_store_key"
+        },
+        "prompt": "=={{$node[\"When chat message received\"].json[\"chatInput\"]}}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreInMemory",
+      "typeVersion": 1.3,
+      "position": [
+        2016,
+        -464
+      ],
+      "id": "13b89126-a828-4057-9208-a494dabbb9df",
+      "name": "Self-store"
+    },
+    {
+      "parameters": {
+        "mode": "load",
+        "memoryKey": {
+          "__rl": true,
+          "mode": "list",
+          "value": "vector_store_key"
+        },
+        "prompt": "=={{$node[\"When chat message received\"].json[\"chatInput\"]}}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreInMemory",
+      "typeVersion": 1.3,
+      "position": [
+        2064,
+        -112
+      ],
+      "id": "c3b5b59a-1230-469c-a15f-a8c9cb6a1d53",
+      "name": "Vacansies-store"
+    },
+    {
+      "parameters": {
+        "modelName": "ai-forever/ru-en-RoSBERTa",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsHuggingFaceInference",
+      "typeVersion": 1,
+      "position": [
+        2048,
+        -256
+      ],
+      "id": "691c6e06-cdba-4c44-b137-38a9aa76d272",
+      "name": "Embeddings HuggingFace Inference9",
+      "credentials": {
+        "huggingFaceApi": {
+          "id": "alF5MT1hUBNdClY9",
+          "name": "HuggingFaceApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "ai-forever/ru-en-RoSBERTa",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsHuggingFaceInference",
+      "typeVersion": 1,
+      "position": [
+        2016,
+        112
+      ],
+      "id": "cb9ef2d0-de08-48d9-a02d-64459eb49a60",
+      "name": "Embeddings HuggingFace Inference10",
+      "credentials": {
+        "huggingFaceApi": {
+          "id": "alF5MT1hUBNdClY9",
+          "name": "HuggingFaceApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Ты — ассистент, который отвечает строго по данным из базы.\n\nВопрос пользователя:\n{{ $items (\"When chat message received\")\n[0].json[\"chatInput\"] }}\n\nДанные о тебе (резюме и результаты теста):\n{{ $items(\"Self-store\")\n    .map(item => item.json.document.pageContent)\n    .join(\"\\n---\\n\") }}\n\nДанные о вакансиях:\n{{ $items(\"Vacansies-store\")\n    .map(item => item.json.document.pageContent)\n    .join(\"\\n---\\n\") }}\n\nИспользуй ТОЛЬКО информацию из найденных документов.\nЕсли сведений недостаточно — честно скажи, что нужной информации нет в базе.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        2688,
+        -336
+      ],
+      "id": "27b719aa-cfb1-4b25-b7e5-b0b44a018e4a",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "openai/gpt-oss-120b",
+          "mode": "list",
+          "cachedResultName": "openai/gpt-oss-120b"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        2864,
+        0
+      ],
+      "id": "09033625-1f2c-4775-b49e-74eb3fdbed9c",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "WqTfUE2neWWu4Imn",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2432,
+        -336
+      ],
+      "id": "5ee65c69-70c8-4900-a312-aadfb20d3c30",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        1552,
+        -288
+      ],
+      "id": "fecdaa01-d36f-4466-be71-11b448973155",
+      "name": "When chat message received",
+      "webhookId": "4c850d80-ff23-42fd-a47f-8e08f856e1d0"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "developer.pdf": {
+      "main": [
+        [
+          {
+            "node": "Extract from developer.pdf",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "analyst.pdf": {
+      "main": [
+        [
+          {
+            "node": "Extract from analyst.pdf",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DevOps.pdf": {
+      "main": [
+        [
+          {
+            "node": "Extract from DevOps.pdf",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "data_science.pdf": {
+      "main": [
+        [
+          {
+            "node": "Extract from data_science.pdf",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from developer.pdf": {
+      "main": [
+        [
+          {
+            "node": "Simple Vector Store 1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings HuggingFace Inference": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Simple Vector Store 1",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from analyst.pdf": {
+      "main": [
+        [
+          {
+            "node": "Simple Vector Store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings HuggingFace Inference1": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Simple Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings HuggingFace Inference2": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Simple Vector Store2",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from data_science.pdf": {
+      "main": [
+        [
+          {
+            "node": "Simple Vector Store3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings HuggingFace Inference3": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Simple Vector Store3",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from DevOps.pdf": {
+      "main": [
+        [
+          {
+            "node": "Simple Vector Store2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "resume.pdf": {
+      "main": [
+        [
+          {
+            "node": "Extract from resume.pdf",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from resume.pdf": {
+      "main": [
+        [
+          {
+            "node": "Simple Vector Store4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings HuggingFace Inference4": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Simple Vector Store4",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "test_results.pdf": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Simple Vector Store5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings HuggingFace Inference5": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Simple Vector Store5",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "developer.pdf1": {
+      "ai_document": [
+        [
+          {
+            "node": "Simple Vector Store 1",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "analyst.pdf1": {
+      "ai_document": [
+        [
+          {
+            "node": "Simple Vector Store",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DevOps.pdf1": {
+      "ai_document": [
+        [
+          {
+            "node": "Simple Vector Store2",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "data_science.pdf1": {
+      "ai_document": [
+        [
+          {
+            "node": "Simple Vector Store3",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "resume.pdf1": {
+      "ai_document": [
+        [
+          {
+            "node": "Simple Vector Store4",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "test_results.pdf1": {
+      "ai_document": [
+        [
+          {
+            "node": "Simple Vector Store5",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Vector Store 1": {
+      "main": [
+        []
+      ]
+    },
+    "Simple Vector Store4": {
+      "main": [
+        []
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "test_results.pdf",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "resume.pdf",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "data_science.pdf",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "DevOps.pdf",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "analyst.pdf",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "developer.pdf",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Self-store": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings HuggingFace Inference9": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Self-store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings HuggingFace Inference10": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Vacansies-store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Vacansies-store": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Self-store",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Vacansies-store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "93fb21d3-0941-49d4-a9ff-f8950da5501e",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "9f37e81d44cd2e32d4f741da70e9e50f43749245b836e124a97237ac2739446d"
+  },
+  "id": "Avp4yoXramb8aNyq",
+  "tags": []
+}
